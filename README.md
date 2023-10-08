@@ -43,17 +43,13 @@ IPython 8.16.0 -- An enhanced Interactive Python. Type '?' for help.
 
 use variable `result` to get the result
 
-In [1]: result.sql("show tables")
+In [1]: result.sql('show tables')
 Out[1]:
 ┌───────────────────────────────────────────────────────────────────────────────┐
 │                                     name                                      │
 │                                    varchar                                    │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ ^\[(.*?)\] \[(.*?)\] (.*?)$                                                   │
-│ ^\[(.*?)\] \[(.*?)\] \[client (.*?)\] (.*?): (.*?)$                           │
-│ ^\[(.*?)\] \[error\] mod_jk child init 1 -2$                                  │
-│ ^\[(.*?)\] \[error\] mod_jk child workerEnv in error state (\d+)$             │
-│ ^\[(.*?)\] \[notice\] workerEnv\.init\(\) ok (.*?)$                           │
+│ ^\[(.+)\] \[error\] \[client (.+)\] Directory index forbidden by rule: (.+)$  │
 │ ^\[(.+)\] \[error\] jk2_init\(\) Can't find child (\d+) in scoreboard$        │
 │ ^\[(.+)\] \[notice\] jk2_init\(\) Found child (\d+) in scoreboard slot (\d+)$ │
 └───────────────────────────────────────────────────────────────────────────────┘
@@ -63,77 +59,91 @@ In [2]: for table in result.sql('show tables').fetchall():
    ...:     table = table[0].replace('"', '""')
    ...:     print(result.sql(f'select * from "{table}"'))
    ...:
+Out[2]:
+^\[(.+)\] \[error\] \[client (.+)\] Directory index forbidden by rule: (.+)$
+┌──────────────────────────┬─────────────────┬────────────────┐
+│            c0            │       c1        │       c2       │
+│         varchar          │     varchar     │    varchar     │
+├──────────────────────────┼─────────────────┼────────────────┤
+│ Sun Dec 04 05:15:09 2005 │ 222.166.160.184 │ /var/www/html/ │
+│ Sun Dec 04 07:45:45 2005 │ 63.13.186.196   │ /var/www/html/ │
+│ Sun Dec 04 08:54:17 2005 │ 147.31.138.75   │ /var/www/html/ │
+│ Sun Dec 04 09:35:12 2005 │ 207.203.80.15   │ /var/www/html/ │
+│ Sun Dec 04 10:53:30 2005 │ 218.76.139.20   │ /var/www/html/ │
+│ Sun Dec 04 11:11:07 2005 │ 24.147.151.74   │ /var/www/html/ │
+│ Sun Dec 04 11:33:18 2005 │ 211.141.93.88   │ /var/www/html/ │
+│ Sun Dec 04 11:42:43 2005 │ 216.127.124.16  │ /var/www/html/ │
+│ Sun Dec 04 12:33:13 2005 │ 208.51.151.210  │ /var/www/html/ │
+│ Sun Dec 04 13:32:32 2005 │ 65.68.235.27    │ /var/www/html/ │
+│            ·             │      ·          │       ·        │
+│            ·             │      ·          │       ·        │
+│            ·             │      ·          │       ·        │
+│ Mon Dec 05 06:36:59 2005 │ 221.232.178.24  │ /var/www/html/ │
+│ Mon Dec 05 09:09:48 2005 │ 207.12.15.211   │ /var/www/html/ │
+│ Mon Dec 05 10:26:39 2005 │ 141.153.150.164 │ /var/www/html/ │
+│ Mon Dec 05 10:28:44 2005 │ 198.232.168.9   │ /var/www/html/ │
+│ Mon Dec 05 10:48:48 2005 │ 67.166.248.235  │ /var/www/html/ │
+│ Mon Dec 05 14:11:43 2005 │ 141.154.18.244  │ /var/www/html/ │
+│ Mon Dec 05 16:45:04 2005 │ 216.216.185.130 │ /var/www/html/ │
+│ Mon Dec 05 17:31:39 2005 │ 218.75.106.250  │ /var/www/html/ │
+│ Mon Dec 05 19:00:56 2005 │ 68.228.3.15     │ /var/www/html/ │
+│ Mon Dec 05 19:14:09 2005 │ 61.220.139.68   │ /var/www/html/ │
+├──────────────────────────┴─────────────────┴────────────────┤
+│ 32 rows (20 shown)                                3 columns │
+└─────────────────────────────────────────────────────────────┘
 
-In [3]: pattern
-Out[3]: 'I, \\[(.+) #6\\]  INFO -- : \\[(.+)\\]   Rendered (.+) within layouts\\/application \\(Duration: (.+)ms \\| Allocations: (.+)\\)'
+^\[(.+)\] \[error\] jk2_init\(\) Can't find child (\d+) in scoreboard$
+┌──────────────────────────┬─────────┐
+│            c0            │   c1    │
+│         varchar          │ varchar │
+├──────────────────────────┼─────────┤
+│ Sun Dec 04 17:43:08 2005 │ 1566    │
+│ Sun Dec 04 17:43:08 2005 │ 1567    │
+│ Sun Dec 04 20:47:16 2005 │ 2082    │
+│ Sun Dec 04 20:47:17 2005 │ 2085    │
+│ Sun Dec 04 20:47:17 2005 │ 2086    │
+│ Sun Dec 04 20:47:17 2005 │ 2087    │
+│ Mon Dec 05 07:57:02 2005 │ 5053    │
+│ Mon Dec 05 07:57:02 2005 │ 5054    │
+│ Mon Dec 05 11:06:52 2005 │ 5619    │
+│ Mon Dec 05 11:06:52 2005 │ 5620    │
+│ Mon Dec 05 11:06:52 2005 │ 5621    │
+│ Mon Dec 05 11:06:52 2005 │ 5622    │
+├──────────────────────────┴─────────┤
+│ 12 rows                  2 columns │
+└────────────────────────────────────┘
 
-In [4]: result.sql(f"select * from '{pattern}' limit 10")
-Out[4]:
-^\[(.*?)\] \[(.*?)\] \[client (.*?)\] (.*?): (.*?)$
-┌──────────────────────────┬─────────┬─────────────────┬───────────────────────────────────┬────────────────┐
-│            c0            │   c1    │       c2        │                c3                 │       c4       │
-│         varchar          │ varchar │     varchar     │              varchar              │    varchar     │
-├──────────────────────────┼─────────┼─────────────────┼───────────────────────────────────┼────────────────┤
-│ Sun Dec 04 05:15:09 2005 │ error   │ 222.166.160.184 │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 07:45:45 2005 │ error   │ 63.13.186.196   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 08:54:17 2005 │ error   │ 147.31.138.75   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 09:35:12 2005 │ error   │ 207.203.80.15   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 10:53:30 2005 │ error   │ 218.76.139.20   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 11:11:07 2005 │ error   │ 24.147.151.74   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 11:33:18 2005 │ error   │ 211.141.93.88   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 11:42:43 2005 │ error   │ 216.127.124.16  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 12:33:13 2005 │ error   │ 208.51.151.210  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Sun Dec 04 13:32:32 2005 │ error   │ 65.68.235.27    │ Directory index forbidden by rule │ /var/www/html/ │
-│            ·             │   ·     │      ·          │                 ·                 │       ·        │
-│            ·             │   ·     │      ·          │                 ·                 │       ·        │
-│            ·             │   ·     │      ·          │                 ·                 │       ·        │
-│ Mon Dec 05 06:36:59 2005 │ error   │ 221.232.178.24  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 09:09:48 2005 │ error   │ 207.12.15.211   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 10:26:39 2005 │ error   │ 141.153.150.164 │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 10:28:44 2005 │ error   │ 198.232.168.9   │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 10:48:48 2005 │ error   │ 67.166.248.235  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 14:11:43 2005 │ error   │ 141.154.18.244  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 16:45:04 2005 │ error   │ 216.216.185.130 │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 17:31:39 2005 │ error   │ 218.75.106.250  │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 19:00:56 2005 │ error   │ 68.228.3.15     │ Directory index forbidden by rule │ /var/www/html/ │
-│ Mon Dec 05 19:14:09 2005 │ error   │ 61.220.139.68   │ Directory index forbidden by rule │ /var/www/html/ │
-├──────────────────────────┴─────────┴─────────────────┴───────────────────────────────────┴────────────────┤
-│ 32 rows (20 shown)                                                                              5 columns │
-└───────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-^\[(.*?)\] \[notice\] workerEnv\.init\(\) ok (.*?)$
-┌──────────────────────────┬─────────────────────────────────────┐
-│            c0            │                 c1                  │
-│         varchar          │               varchar               │
-├──────────────────────────┼─────────────────────────────────────┤
-│ Mon Dec 05 19:15:57 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 19:14:11 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 19:11:04 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 19:00:54 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 19:00:44 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 19:00:44 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 18:56:04 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 18:56:04 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 18:50:31 2005 │ /etc/httpd/conf/workers2.properties │
-│ Mon Dec 05 18:45:53 2005 │ /etc/httpd/conf/workers2.properties │
-│            ·             │                  ·                  │
-│            ·             │                  ·                  │
-│            ·             │                  ·                  │
-│ Sun Dec 04 04:52:49 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:52:12 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:52:12 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:52:12 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:51:52 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:51:52 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:51:14 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:51:14 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:51:14 2005 │ /etc/httpd/conf/workers2.properties │
-│ Sun Dec 04 04:47:44 2005 │ /etc/httpd/conf/workers2.properties │
-├──────────────────────────┴─────────────────────────────────────┤
-│ 569 rows (20 shown)                                  2 columns │
-└────────────────────────────────────────────────────────────────┘
-
-...
+^\[(.+)\] \[notice\] jk2_init\(\) Found child (\d+) in scoreboard slot (\d+)$
+┌──────────────────────────┬─────────┬─────────┐
+│            c0            │   c1    │   c2    │
+│         varchar          │ varchar │ varchar │
+├──────────────────────────┼─────────┼─────────┤
+│ Sun Dec 04 04:51:08 2005 │ 6725    │ 10      │
+│ Sun Dec 04 04:51:09 2005 │ 6726    │ 8       │
+│ Sun Dec 04 04:51:09 2005 │ 6728    │ 6       │
+│ Sun Dec 04 04:51:37 2005 │ 6736    │ 10      │
+│ Sun Dec 04 04:51:38 2005 │ 6733    │ 7       │
+│ Sun Dec 04 04:51:38 2005 │ 6734    │ 9       │
+│ Sun Dec 04 04:52:04 2005 │ 6738    │ 6       │
+│ Sun Dec 04 04:52:04 2005 │ 6741    │ 9       │
+│ Sun Dec 04 04:52:05 2005 │ 6740    │ 7       │
+│ Sun Dec 04 04:52:05 2005 │ 6737    │ 8       │
+│            ·             │  ·      │ ·       │
+│            ·             │  ·      │ ·       │
+│            ·             │  ·      │ ·       │
+│ Mon Dec 05 18:50:30 2005 │ 6733    │ 8       │
+│ Mon Dec 05 18:56:03 2005 │ 6740    │ 7       │
+│ Mon Dec 05 18:56:03 2005 │ 6741    │ 8       │
+│ Mon Dec 05 19:00:43 2005 │ 6750    │ 8       │
+│ Mon Dec 05 19:00:43 2005 │ 6749    │ 7       │
+│ Mon Dec 05 19:00:54 2005 │ 6751    │ 10      │
+│ Mon Dec 05 19:11:00 2005 │ 6780    │ 7       │
+│ Mon Dec 05 19:14:08 2005 │ 6784    │ 8       │
+│ Mon Dec 05 19:15:55 2005 │ 6791    │ 8       │
+│ Mon Dec 05 19:15:55 2005 │ 6790    │ 7       │
+├──────────────────────────┴─────────┴─────────┤
+│ 836 rows (20 shown)                3 columns │
+└──────────────────────────────────────────────┘
 ```
 
 DuckDB also supports saving results to various output types such as CSV, JSON, and Parquet, among others. For more information, visit DuckDB's [documentation](http://duckdb.org/docs/archive/0.9.0/guides/python/export_pandas).
