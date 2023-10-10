@@ -43,7 +43,7 @@ class Serializer(json.JSONEncoder, metaclass=SingletonMeta):
 
 class Memory(Singleton):
     home = os.environ["HOME"]
-    PATH = f"{home}/.log2row"
+    PATH = f"{home}/.bakalog"
 
     def __init__(
         self,

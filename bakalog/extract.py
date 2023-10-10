@@ -115,7 +115,7 @@ def extract(
                 "role": "system",
                 "content": "You are a senior regular expression developer."
                 "Create a regular expression which could match, group and extract the log template of several logs below."
-                "Exactly the same part between logs must be the part of template."
+                "The exactly same part between logs must be the part of template."
                 "Pattern should start with `^` and end with `$`",
             },
             {
