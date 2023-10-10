@@ -1,3 +1,9 @@
+---
+layout: minimal
+---
+
+# STRUCTURED LOGS ARE USEFUL, AND GPT MAKE IT EASIER
+
 Ever found yourself in the same predicament as I have? As a backend developer, I often find myself in a dilemma during service program diagnostics: I regret not having collected and structured more logs in advance for insertion into Elasticsearch, while also being panic by the complexity of grep, awk and sed commands.
 
 Recently, however, I seem to have seen a turning point: I've made a new attempt based on some recent innovations. I've created a command-line tool that leverages the LLM's automatic structuring capabilities to structure logs after the fact, and uses an in-process localized OLAP database, Python REPL, and Numpy / Pandas to provide a quick and powerful querying and processing workstation. You can [check out the results here](https://github.com/ethe/bakalog). Below are some of my thoughts on the issue of log processing.
@@ -101,6 +107,17 @@ After clustering the logs, we need to identify the log patterns to facilitate th
     │            ·             │ ·       │  │            ·             │  ·      │ ·       │
     └────────────────────────────────────┘  └──────────────────────────────────────────────┘
 ```
+
+And LLM is a perfect fit for this job: LLM performs exceptionally well in pattern recognition and summarization. I once attempted to submit each log to GPT-4 for pattern recognition, [but LLM was too slow](https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow). Ultimately, I chose to provide GPT-4 only with samples from each log group, prompting GPT-4 to generate regular expressions, and using these for direct log matching. Only when a log does not belong to any regular expression, does further log clustering and summarization occur. The advantage of this approach is that after a brief cold-start period, the vast majority of logs will be processed via regular expressions and will no longer rely on GPT-4.
+
+In the end, we have a complete tool:
+
+1. Use regular expressions to match and extract log variables;
+2. Cluster logs based on text embedding model;
+3. Use GPT-4 to extract regular expressions from samples of each log category;
+4. Automatically create DuckDB tables and open IPython/Jupyter;
+
+You can see the final demonstration in [bakalog/README.md](https://github.com/ethe/bakalog#what-it-does).
 
 ## WHAT'S NEXT?
 
