@@ -37,4 +37,4 @@ jobs:
     - name: Test Installation
       run: |
         pip install -e '.'
-        python -m log2row --help
+        python -m bakalog --help

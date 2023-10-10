@@ -7,10 +7,10 @@ import openai
 from IPython import embed
 from rich.logging import RichHandler
 
-from log2row import Match, Sink, collect
-from log2row.cluster import Cluster
-from log2row.extract import extract
-from log2row.util import Memory, parse_size
+from bakalog import Match, Sink, collect
+from bakalog.cluster import Cluster
+from bakalog.extract import extract
+from bakalog.util import Memory, parse_size
 
 
 @click.group()
@@ -19,7 +19,7 @@ def main():
 
 
 @main.command(
-    help="log2row cache all extracted patterns to each files as default, clean the cache as needed."
+    help="bakalog cache all extracted patterns to each files as default, clean the cache as needed."
 )
 def clean():
     files = glob(f"{Memory.PATH}/*")

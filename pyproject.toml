@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "log2row"
+name = "bakalog"
 version = "0.1.0"
 description = ""
 authors = ["Gwo Tzu-Hsing <gotzehsing@gmail.com>"]
